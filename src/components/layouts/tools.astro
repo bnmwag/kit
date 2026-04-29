@@ -1,0 +1,109 @@
+---
+import Icon from "@/components/snippets/icon.astro";
+import SectionHeading from "@/components/partials/section-heading.astro";
+import tools from "@/data/tools.json";
+
+const inviewShapes = [
+  { mod: "-first", offset: "10%", speed: "0.01", icon: "inview-01", progress: true },
+  { mod: "-second", offset: "30%", speed: "0.1", icon: "inview-02", progress: false },
+  { mod: "-third", offset: "25%", speed: "0.02", icon: "inview-03", progress: false },
+  { mod: "-fourth", offset: "45%", speed: "0.05", icon: "inview-04", progress: false },
+  { mod: "-fifth", offset: "20%", speed: "0.15", icon: "inview-05", progress: true },
+  { mod: "-sixth", offset: "60%", speed: "0.05", icon: "inview-06", progress: false },
+] as const;
+
+const progressShapes = [
+  { mod: "-first", index: -2, icon: "progress-01" },
+  { mod: "-second", index: -1, icon: "progress-02" },
+  { mod: "-third", index: 0, icon: "progress-03" },
+  { mod: "-fourth", index: 1, icon: "progress-04" },
+  { mod: "-fifth", index: 2, icon: "progress-05" },
+] as const;
+
+const parallaxShapes = [
+  { mod: "-first", speed: "0.04", icon: "parallax-01" },
+  { mod: "-second", speed: "0.2", icon: "parallax-02" },
+  { mod: "-third", speed: "0.3", icon: "parallax-03" },
+  { mod: "-fourth", speed: "0.15", icon: "parallax-04" },
+  { mod: "-fifth", speed: "0.25", icon: "parallax-05" },
+] as const;
+---
+
+<section class='u-relative || u-clipped || u-padding-bottom-2xl' data-theme='blue'>
+  <div class='c-header-theme-toggler' data-scroll data-scroll-repeat data-scroll-call='changeHeaderTheme' data-scroll-offset='100%'></div>
+
+  <SectionHeading
+    title={["Built-in", "Tools"]}
+    labelLeft={'<span class="u-glyph" aria-hidden="true">🔴</span>Work faster'}
+    labelRight={'Work smarter<span class="u-glyph" aria-hidden="true">🔴</span>'}
+  />
+
+  <div class='c-tool -inview' data-scroll data-scroll-offset='5%'>
+    <div class='o-container'>
+      <div class='c-tool_head'>
+        <span class='c-tool_index'>01</span>
+        <span class='c-tool_label'>{tools.inview.title}</span>
+        <span class='c-tool_description'>{tools.inview.description}</span>
+        <h3 class='c-tool_title || c-heading -h2'>{tools.inview.title}</h3>
+      </div>
+    </div>
+
+    <div class='c-tool_playground' style='--container-ratio: 7/5'>
+      {
+        inviewShapes.map((shape) => (
+          <div class={`c-tool_shape ${shape.mod}`} data-scroll data-scroll-offset={shape.offset} data-scroll-repeat>
+            <div class='c-tool_shape_inner' data-scroll data-scroll-speed={shape.speed} data-scroll-css-progress={shape.progress ? "" : undefined}>
+              <Icon icon={shape.icon} modifiers='c-tool_shape_svg' />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class='c-tool -progress' data-scroll data-scroll-offset='5%'>
+    <div class='o-container'>
+      <div class='c-tool_head'>
+        <span class='c-tool_index'>02</span>
+        <span class='c-tool_label'>{tools.progress.title}</span>
+        <span class='c-tool_description'>{tools.progress.description}</span>
+        <h3 class='c-tool_title || c-heading -h2'>{tools.progress.title}</h3>
+      </div>
+    </div>
+
+    <div class='c-tool_playground' style='--container-ratio: 12/5'>
+      {
+        progressShapes.map((shape) => (
+          <div class={`c-tool_shape ${shape.mod}`} style={`--index: ${shape.index}`} data-scroll data-scroll-css-progress>
+            <div class='c-tool_shape_inner'>
+              <Icon icon={shape.icon} modifiers='c-tool_shape_svg' />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class='c-tool -parallax' data-scroll data-scroll-offset='5%'>
+    <div class='o-container'>
+      <div class='c-tool_head'>
+        <span class='c-tool_index'>02</span>
+        <span class='c-tool_label'>{tools.parallax.title}</span>
+        <span class='c-tool_description'>{tools.parallax.description}</span>
+        <h3 class='c-tool_title || c-heading -h2'>{tools.parallax.title}</h3>
+      </div>
+    </div>
+
+    <div class='c-tool_playground' style='--container-ratio: 10/5'>
+      {
+        parallaxShapes.map((shape) => (
+          <div class={`c-tool_shape ${shape.mod}`}>
+            <div class='c-tool_shape_inner' data-scroll data-scroll-speed={shape.speed} data-scroll-enable-touch-speed>
+              <Icon icon={shape.icon} modifiers='c-tool_shape_svg' />
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

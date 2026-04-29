@@ -1,0 +1,15 @@
+---
+interface Props {
+  icon: string;
+  classes?: string;
+  modifiers?: string;
+}
+
+const { icon, classes, modifiers } = Astro.props;
+---
+
+<span class:list={["o-icon", modifiers, classes]}>
+  <svg class={`svg-${icon}`} focusable="false" aria-hidden="true">
+    <use xlink:href={`/assets/images/sprite.svg#${icon}`}></use>
+  </svg>
+</span>

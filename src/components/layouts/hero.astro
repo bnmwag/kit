@@ -1,0 +1,59 @@
+---
+import Button from "@/components/snippets/button.astro";
+import general from "@/data/general.json";
+---
+
+<section class='o-container || u-relative || u-clipped' data-theme='blue'>
+  <div class='c-hero_bg' data-scroll data-scroll-speed='-0.3'>
+    <img src='/images/hero-bg.svg' alt='' loading='eager' decoding='async' />
+  </div>
+
+  <div class='c-header-theme-toggler -hero' data-scroll data-scroll-repeat data-scroll-call='changeHeaderTheme' data-scroll-ignore-fold></div>
+
+  <div class='c-hero'>
+    <div class='c-hero_sticky'>
+      <div class='c-hero_main'>
+        <div class='c-hero_heading'>
+          <h1 class='c-hero_title || c-heading -h1'>
+            <span class='c-hero_line' style='--index: 0'>
+              <span class='u-glyph || c-hero_word || -hero' aria-hidden='true'>🟦🔁</span>
+            </span>
+            <span class='c-hero_line' style='--index: 1'>
+              <span class='c-hero_word || -hero'>Locomotive®</span>
+            </span>
+            <span class='c-hero_line' style='--index: 2'>
+              <span class='c-hero_word || -hero'>Scroll</span>
+            </span>
+          </h1>
+
+          <div class='c-hero_description_container || fadeInText -blue'>
+            <div
+              role='group'
+              class='c-text -body-medium || u-max-w440 || c-hero_description'
+              data-module-fade-in-text
+              data-scroll
+              data-scroll-offset='10%,30%'
+              data-scroll-event-progress='fadeinTextProgress'
+            >
+              {general.description}
+            </div>
+            <p class='c-hero_version || c-text -body-medium || u-clipped' data-scroll data-scroll-offset='25%'>
+              <span class='u-glyph' aria-hidden='true'>🔻</span>
+              <span>Version {general.version}</span>
+            </p>
+          </div>
+        </div>
+        <nav class='c-hero_nav'>
+          <ul class='c-hero_links'>
+            <li class='c-hero_links_item'>
+              <Button label='View on Github' icon='github' href={general.github} attr={{ "data-load": "false" }} />
+            </li>
+            <li class='c-hero_links_item'>
+              <Button label='Read documentation' icon='doc' href={general.documentation} modifiers='-stroke' attr={{ "data-load": "false" }} />
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>

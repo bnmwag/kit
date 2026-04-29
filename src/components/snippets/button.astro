@@ -1,0 +1,48 @@
+---
+import Icon from "@/components/snippets/icon.astro";
+
+interface Props {
+  tag?: string;
+  href?: string;
+  external?: boolean;
+  classes?: string;
+  modifiers?: string;
+  label?: string;
+  icon?: string;
+  attr?: Record<string, string | boolean | number>;
+}
+
+const {
+  tag = "button",
+  href,
+  external = false,
+  classes,
+  modifiers,
+  label,
+  icon,
+  attr = {},
+} = Astro.props;
+
+const Tag = (href ? "a" : tag === "a" ? "span" : tag) as keyof HTMLElementTagNameMap;
+
+const buttonClasses = ["c-button", modifiers, classes].filter(Boolean).join(" ");
+
+const externalAttrs = external
+  ? { target: "_blank", rel: "noopener noreferrer" }
+  : {};
+---
+
+<Tag class={buttonClasses} href={href} {...externalAttrs} {...attr}>
+  <span class="c-button_wrap">
+    <span class="c-button_inner">
+      {icon && <Icon icon={icon} classes="c-button_icon" />}
+      {label && <span class="c-button_label">{label}</span>}
+    </span>
+  </span>
+  <span class="c-button_wrap" aria-hidden="true">
+    <span class="c-button_inner">
+      {icon && <Icon icon={icon} classes="c-button_icon" />}
+      {label && <span class="c-button_label">{label}</span>}
+    </span>
+  </span>
+</Tag>

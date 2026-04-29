@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: readonly string[];
+  labelLeft?: string;
+  labelRight?: string;
+}
+
+const { title, labelLeft, labelRight } = Astro.props;
+---
+
+<h2 class="c-heading-serif -large || c-section-heading || u-padding-bottom-3xl u-padding-top-md">
+  <span class="c-section-heading_line">
+    <span class="c-section-heading_word">{title[0]}</span>
+  </span>
+  {
+    title[1] && (
+      <span class="c-section-heading_line">
+        <span class="c-section-heading_word">{title[1]}</span>
+
+        {labelLeft && (
+          <span class="c-text -body-medium || c-section-heading_label -left" set:html={labelLeft} />
+        )}
+
+        {labelRight && (
+          <span class="c-text -body-medium || c-section-heading_label -right" set:html={labelRight} />
+        )}
+      </span>
+    )
+  }
+</h2>

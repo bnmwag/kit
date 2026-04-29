@@ -1,17 +1,16 @@
 ---
-
+import Base from "@/layouts/base.astro";
+import Hero from "@/components/layouts/hero.astro";
+import Perks from "@/components/layouts/perks.astro";
+import Tools from "@/components/layouts/tools.astro";
+import Features from "@/components/layouts/features.astro";
+import Showcase from "@/components/layouts/showcase.astro";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base>
+  <Hero />
+  <Perks />
+  <Tools />
+  <Features />
+  <Showcase />
+</Base>

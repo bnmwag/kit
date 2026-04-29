@@ -1,0 +1,76 @@
+---
+import "@/styles/main.scss";
+
+import Header from "@/components/partials/header.astro";
+import Footer from "@/components/partials/footer.astro";
+import metadata from "@/data/metadata.json";
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogUrl?: string;
+  ogImage?: string;
+  ogImageAlt?: string;
+}
+
+const {
+  title,
+  description,
+  ogUrl,
+  ogImage,
+  ogImageAlt,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${metadata.title}` : metadata.title;
+const fullDescription = description ?? metadata.description;
+const fullOgImage = ogImage ?? metadata.ogImage;
+const fullOgImageAlt = ogImageAlt ?? metadata.title;
+---
+
+<!doctype html>
+<html class="is-loading" lang="en" data-header-theme="blue">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={fullDescription} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={fullDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`${metadata.url}${ogUrl ?? ""}`} />
+    <meta property="og:image" content={fullOgImage} />
+    <meta property="og:image:width" content={metadata.ogImageWidth} />
+    <meta property="og:image:height" content={metadata.ogImageHeight} />
+    <meta property="og:image:alt" content={fullOgImageAlt} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={fullDescription} />
+    <meta name="twitter:image" content={fullOgImage} />
+    <meta name="twitter:image:alt" content={fullOgImageAlt} />
+
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+  </head>
+  <body data-module-load>
+    <div class="c-preloader"></div>
+
+    <div data-load-container>
+      <div data-module-scroll="main">
+        <Header />
+
+        <main>
+          <slot />
+
+          <Footer />
+        </main>
+      </div>
+    </div>
+
+    <script>
+      import "@/scripts/app.js";
+    </script>
+  </body>
+</html>

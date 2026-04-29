@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1200" preserveAspectRatio="xMidYMid slice" role="presentation" aria-hidden="true">
+  <defs>
+    <radialGradient id="base" cx="25%" cy="80%" r="100%">
+      <stop offset="0%" stop-color="#3645ff"/>
+      <stop offset="55%" stop-color="#1a26b8"/>
+      <stop offset="100%" stop-color="#0a1166"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="78%" cy="22%" r="55%">
+      <stop offset="0%" stop-color="#6e80ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#6e80ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="haze" cx="50%" cy="100%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="vignette" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#000022" stop-opacity="0.35"/>
+      <stop offset="50%" stop-color="#000022" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000022" stop-opacity="0.45"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1200" fill="url(#base)"/>
+  <rect width="1920" height="1200" fill="url(#glow)"/>
+  <rect width="1920" height="1200" fill="url(#haze)"/>
+
+  <g opacity="0.9">
+    <circle cx="320" cy="220" r="180" fill="#ffffff" opacity="0.05"/>
+    <circle cx="1620" cy="780" r="260" fill="#ffffff" opacity="0.04"/>
+    <circle cx="1080" cy="540" r="90"  fill="#ffffff" opacity="0.07"/>
+    <circle cx="780"  cy="980" r="140" fill="#ffffff" opacity="0.04"/>
+    <circle cx="1480" cy="120" r="60"  fill="#ffffff" opacity="0.08"/>
+  </g>
+
+  <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="1" fill="none">
+    <path d="M0 920 Q 480 860 960 920 T 1920 920"/>
+    <path d="M0 980 Q 480 920 960 980 T 1920 980"/>
+    <path d="M0 1040 Q 480 980 960 1040 T 1920 1040"/>
+  </g>
+
+  <rect width="1920" height="1200" fill="url(#vignette)"/>
+</svg>
