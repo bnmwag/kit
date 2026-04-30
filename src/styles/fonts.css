@@ -1,0 +1,7 @@
+@font-face {
+  font-family: "PP Locomotive New";
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url("/fonts/PPLocomotiveNew-Light.woff2") format("woff2");
+}

@@ -1,0 +1,17 @@
+/* Page padding, no grid. */
+@utility layout-block {
+  @apply px-grid-margin;
+}
+
+/* 12-column grid, no page padding. */
+@utility layout-inner-grid {
+  @apply grid grid-cols-12 gap-x-grid-gutter;
+}
+
+/* Page padding + 12-column grid. */
+@utility layout-grid {
+  @apply px-grid-margin grid grid-cols-12 gap-x-grid-gutter;
+}
+
+/* Active during Swup transitions (html.is-animating). */
+@custom-variant animating (&:where(html.is-animating *), &:where(html.is-animating));

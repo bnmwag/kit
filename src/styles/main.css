@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@source "../**/*.{astro,html,js,ts,jsx,tsx}";
+
+@import "locomotive-scroll/dist/locomotive-scroll.css";
+
+@import "./fonts.css";
+@import "./theme.css";
+@import "./utilities.css";
+@import "./page-transition.css";
+
+html {
+    font-family: var(--font-sans);
+    font-weight: 500;
+}
+
+body {
+    background: var(--background);
+    color: var(--foreground);
+}
+
+main > section {
+    position: relative;
+    background: var(--background);
+    z-index: 1;
+}
+
+::selection {
+    background-color: var(--color-primary);
+    color: var(--color-secondary);
+    text-shadow: none;
+}

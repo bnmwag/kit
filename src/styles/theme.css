@@ -1,0 +1,47 @@
+@utility theme-light {
+  --background: #fafafa;
+  --foreground: #0b0b0a;
+  --accent: #E3131B;
+
+  @apply bg-background text-foreground;
+}
+
+@utility theme-dark {
+  --background: #0b0b0a;
+  --foreground: #fafafa;
+  --accent: #E3131B;
+
+  @apply bg-background text-foreground;
+}
+
+@utility theme-accent {
+  --background: #E3131B;
+  --foreground: #fafafa;
+  --accent: #0b0b0a;
+
+  @apply bg-background text-foreground;
+}
+
+:root { @apply theme-light; }
+
+@theme inline {
+  --font-sans:  var(--font-zalando-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "PP Locomotive New", ui-serif, Georgia, Cambria, "Times New Roman", serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent:     var(--accent);
+
+  --grid-columns:          12;
+  --spacing-grid-margin:   1rem;
+  --spacing-grid-gutter:   1rem;
+  --spacing-header-height: 4rem;
+}
+
+/* Responsive overrides:
+@media (min-width: 64rem) {
+  :root {
+    --spacing-grid-margin: 2rem;
+    --spacing-grid-gutter: 1.5rem;
+  }
+} */

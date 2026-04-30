@@ -1,16 +1,15 @@
 ---
 import Base from "@/layouts/base.astro";
-import Hero from "@/components/layouts/hero.astro";
-import Perks from "@/components/layouts/perks.astro";
-import Tools from "@/components/layouts/tools.astro";
-import Features from "@/components/layouts/features.astro";
-import Showcase from "@/components/layouts/showcase.astro";
 ---
 
-<Base>
-  <Hero />
-  <Perks />
-  <Tools />
-  <Features />
-  <Showcase />
+<Base title='Vault' description='Clean Tailwind v4 + Astro starter.'>
+    <section class='theme-light relative layout-block py-grid-gutter flex h-svh items-end justify-center'>
+        <div class='text-[50vw] text-accent leading-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-serif'>🔝</div>
+        <h1 class='text-[12vw] leading-none font-serif'>
+            <span class='inline-block' data-scroll data-scroll-speed='-0.15'>🔴</span>
+            <a href='/colors' class='inline-block' data-scroll data-scroll-speed='-0.30'>Locomotive</a>
+            <span class='inline-block' data-scroll data-scroll-speed='-0.15'>🔵</span>
+        </h1>
+    </section>
+    <section class='h-svh'></section>
 </Base>
