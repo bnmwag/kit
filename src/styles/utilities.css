@@ -15,3 +15,12 @@
 
 /* Active during Swup transitions (html.is-animating). */
 @custom-variant animating (&:where(html.is-animating *), &:where(html.is-animating));
+
+
+@utility text-h1 {
+  @apply text-[clamp(2.5rem,13vw,20rem)] font-thin tracking-tighter leading-[0.8];
+}
+
+@utility text-h2 {
+  @apply text-[clamp(1.75rem,6.5vw,10rem)] font-thin tracking-tighter leading-[0.8];
+}
