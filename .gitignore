@@ -22,3 +22,15 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# AI agent / editor settings
+.claude/
+.cursor/
+.aider*
+.codeium/
+
+# typescript incremental cache
+*.tsbuildinfo
+
+# vercel
+.vercel/
