@@ -1,0 +1,28 @@
+---
+import { sanityClient } from "sanity:client";
+import { RenderBlocks } from "@/blocks";
+import { groq } from "@/cms/queries";
+import { Base } from "@/components/layout";
+
+export const getStaticPaths = async () => {
+    const pages = await sanityClient.fetch(groq.page.allSlugs);
+
+    return pages.map(({ slug }) => ({
+        params: { slug: slug === "home" ? "" : slug },
+        props: { slug },
+    }));
+};
+
+interface Props {
+    slug: string;
+}
+
+const { slug } = Astro.props;
+
+const page = await sanityClient.fetch(groq.page.bySlug, { slug });
+if (!page) Astro.redirect("/404");
+---
+
+<Base title={page.title}>
+    <RenderBlocks sections={page.content} />
+</Base>
