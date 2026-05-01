@@ -4,8 +4,8 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 
 export default defineConfig({
-	name: "vault",
-	title: "Vault",
+	name: "kit",
+	title: "Kit",
 	projectId: "aokf8xnz",
 	dataset: "production",
 	plugins: [structureTool({ structure })],
