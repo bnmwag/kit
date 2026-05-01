@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @source "../**/*.{astro,html,js,ts,jsx,tsx}";
+@source inline('theme-{light,dark,accent}');
 
 @import "locomotive-scroll/dist/locomotive-scroll.css";
 
@@ -26,7 +27,7 @@ main > section {
 }
 
 ::selection {
-    background-color: var(--color-primary);
-    color: var(--color-secondary);
+    background-color: var(--foreground);
+    color: var(--background);
     text-shadow: none;
 }

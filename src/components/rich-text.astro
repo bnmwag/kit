@@ -1,0 +1,24 @@
+---
+import { VaultIcon } from "@/components/icons";
+
+const tokens = {
+    "🔴": VaultIcon,
+} as const;
+
+interface Props {
+    text?: string | null;
+}
+
+const { text } = Astro.props;
+
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const pattern = new RegExp(`(${Object.keys(tokens).map(escape).join("|")})`, "g");
+const parts = text ? text.split(pattern) : [];
+---
+
+{
+    parts.map((part) => {
+        const Icon = tokens[part as keyof typeof tokens];
+        return Icon ? <Icon /> : part;
+    })
+}
