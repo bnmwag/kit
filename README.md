@@ -1,43 +1,49 @@
-# Astro Starter Kit: Minimal
+# Kit
+
+Astro + Sanity starter. Locomotive Scroll, GSAP, Tailwind v4, Swup transitions. Built by creatives, for creatives — less yak-shaving, more actual work.
+
+## Setup
 
 ```sh
-bun create astro@latest -- --template minimal
+# 1. clone
+bunx degit bnmwag/kit my-app
+cd my-app
+
+# 2. configure
+cp .env.example .env
+# fill in SANITY_PROJECT_ID (find it at https://sanity.io/manage)
+
+# 3. install + run
+bun install
+bun run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Scripts
 
-## 🚀 Project Structure
+| Command         | What it does                              |
+| :-------------- | :---------------------------------------- |
+| `dev`           | Start dev server at `localhost:4321`      |
+| `build`         | Build to `./dist/`                        |
+| `preview`       | Preview the production build locally      |
+| `check`         | Run `astro check` (type + content checks) |
+| `typegen`       | Extract Sanity schema and regenerate types |
 
-Inside of your Astro project, you'll see the following folders and files:
+The Sanity studio is mounted at `/admin`.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Stack
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+- **Astro + Sanity** — static output, structured content
+- **Vercel** — hosting, ISR, instant rollbacks
+- **Locomotive Scroll + GSAP** — smooth scroll, scripted motion
+- **Tailwind v4 + Swup** — styling and page transitions
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+## Environment
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Variable             | Required | Default      |
+| :------------------- | :------- | :----------- |
+| `SANITY_PROJECT_ID`  | yes      | —            |
+| `SANITY_DATASET`     | no       | `production` |
 
-## 🧞 Commands
+## License
 
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `bun install`             | Installs dependencies                            |
-| `bun dev`             | Starts local dev server at `localhost:4321`      |
-| `bun build`           | Build your production site to `./dist/`          |
-| `bun preview`         | Preview your build locally, before deploying     |
-| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `bun astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+MIT.
