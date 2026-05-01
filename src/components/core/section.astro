@@ -9,6 +9,10 @@ interface Props extends HTMLAttributes<"section"> {
 const { class: className, _type, theme, ...props } = Astro.props;
 ---
 
-<section data-block={_type} class={`relative bg-background text-foreground py-16 lg:py-[17vh] ${className ?? ""} theme-${theme}`} {...props}>
+<section
+    data-block={_type}
+    class={`relative bg-background text-foreground py-16 lg:py-[17vh] ${className ?? ""} theme-${theme}`}
+    {...props}
+>
     <slot />
 </section>
