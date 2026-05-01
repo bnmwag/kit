@@ -16,6 +16,14 @@ export default defineConfig({
 			styles: ["normal"],
 			subsets: ["latin"],
 		},
+		{
+			provider: fontProviders.fontsource(),
+			name: "JetBrains Mono",
+			cssVariable: "--font-jetbrains-mono",
+			weights: ["100", "300", "400", "500", "600", "700"],
+			styles: ["normal"],
+			subsets: ["latin"],
+		},
 	],
 
 	vite: {
