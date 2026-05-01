@@ -12,7 +12,7 @@ export default defineConfig({
 			provider: fontProviders.fontsource(),
 			name: "Zalando Sans",
 			cssVariable: "--font-zalando-sans",
-			weights: ["400", "500", "600", "700"],
+			weights: ["100", "300", "400", "500", "600", "700"],
 			styles: ["normal"],
 			subsets: ["latin"],
 		},
@@ -20,6 +20,9 @@ export default defineConfig({
 
 	vite: {
 		plugins: [tailwindcss()],
+		resolve: {
+			noExternal: ["sanity"],
+		},
 	},
 
 	integrations: [
