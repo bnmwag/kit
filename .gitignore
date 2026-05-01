@@ -28,6 +28,7 @@ pnpm-debug.log*
 .cursor/
 .aider*
 .codeium/
+.vscode/
 
 # typescript incremental cache
 *.tsbuildinfo
