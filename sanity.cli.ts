@@ -1,9 +1,16 @@
 import { defineCliConfig } from "sanity/cli";
 
+const projectId = process.env.SANITY_PROJECT_ID;
+const dataset = process.env.SANITY_DATASET ?? "production";
+
+if (!projectId) {
+	throw new Error("SANITY_PROJECT_ID env var is required");
+}
+
 export default defineCliConfig({
 	api: {
-		projectId: "aokf8xnz",
-		dataset: "production",
+		projectId,
+		dataset,
 	},
 	autoUpdates: true,
 	typegen: {

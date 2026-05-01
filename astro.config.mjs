@@ -1,10 +1,17 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
+import { loadEnv } from "vite";
 
 import tailwindcss from "@tailwindcss/vite";
 
 import react from "@astrojs/react";
 import sanity from "@sanity/astro";
+
+const env = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
+
+if (!env.SANITY_PROJECT_ID) {
+	throw new Error("SANITY_PROJECT_ID env var is required");
+}
 
 export default defineConfig({
 	fonts: [
@@ -35,8 +42,8 @@ export default defineConfig({
 
 	integrations: [
 		sanity({
-			projectId: "aokf8xnz",
-			dataset: "production",
+			projectId: env.SANITY_PROJECT_ID,
+			dataset: env.SANITY_DATASET ?? "production",
 			useCdn: false,
 			studioBasePath: "/admin",
 		}),
