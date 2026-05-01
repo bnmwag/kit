@@ -1,6 +1,7 @@
 ---
 import type { Hero } from "@/cms/sanity.types";
 import { Container, Grid, Section } from "@/components/core";
+import GridLines from "@/components/misc/grid-lines.astro";
 
 interface Props {
     data: Hero;
@@ -11,16 +12,25 @@ const { _type, theme, title } = data;
 ---
 
 <Section class='h-svh py-grid-margin! overflow-clip' {_type} {theme}>
+    <GridLines />
     <Container class='h-full'>
-        <Grid class='h-full'>
+        <Grid class='h-full grid-rows-[auto_1fr_auto]'>
             <h1
-                class='hero-headline self-end col-span-full font-thin tracking-tighter leading-[0.95]'
-                style='font-size: clamp(2.5rem, 5.67vw, 8rem)'
+                class='hero-headline col-span-full row-start-2 self-start font-thin tracking-tighter leading-[0.8]'
+                style='font-size: clamp(2.5rem, 13vw, 20rem)'
                 aria-label={title}
                 data-hero-headline
             >
                 {title}
             </h1>
+            <h2
+                class='hero-headline col-span-full row-start-2 self-end font-thin tracking-tighter leading-[0.8] text-foreground/35'
+                style='font-size: clamp(1.75rem, 6.5vw, 10rem)'
+                aria-label={"run `bun run setup`"}
+                data-hero-headline
+            >
+                $ bun run setup
+            </h2>
         </Grid>
     </Container>
 </Section>
@@ -104,4 +114,25 @@ const { _type, theme, title } = data;
     };
 
     document.querySelectorAll<HTMLElement>("[data-hero-headline]").forEach(init);
+
+    document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
+        const label = btn.querySelector<HTMLElement>("[data-copy-label]");
+        const original = label?.textContent ?? "Copy";
+        let timer: number | undefined;
+        btn.addEventListener("click", async () => {
+            const text = btn.dataset.copy;
+            if (!text) return;
+            try {
+                await navigator.clipboard.writeText(text);
+                if (!label) return;
+                label.textContent = "Copied";
+                window.clearTimeout(timer);
+                timer = window.setTimeout(() => {
+                    label.textContent = original;
+                }, 1500);
+            } catch (error) {
+                console.error("Clipboard write failed:", error);
+            }
+        });
+    });
 </script>
