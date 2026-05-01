@@ -1,13 +1,8 @@
-import { heroBlock_config } from "@/blocks/hero-block/hero-block.config";
+import { blocks } from "@/blocks";
 import type { SchemaTypeDefinition } from "sanity";
-import { pageBuilderType } from "./page-builder.type";
 import { pageType } from "./page.type";
+import { sectionsType } from "./sections.type";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-	types: [
-		pageType,
-		pageBuilderType,
-		// Blocks
-		heroBlock_config,
-	],
+	types: [pageType, sectionsType, ...blocks.map((b) => b.config)],
 };

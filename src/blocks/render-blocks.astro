@@ -1,0 +1,19 @@
+---
+import { blocks as registry } from "@/blocks";
+import type { Page } from "@/cms/sanity.types";
+
+interface Props {
+    sections?: Page["content"] | null;
+}
+
+const { sections } = Astro.props;
+---
+
+{
+    sections?.map((block) => {
+        const entry = registry.find((b) => b.name === block._type);
+        if (!entry) return null;
+        const Markup = entry.markup;
+        return <Markup data={block} />;
+    })
+}

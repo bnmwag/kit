@@ -1,13 +1,7 @@
 import { defineField, defineType } from "sanity";
+import { baseBlock } from "../base-block";
 
-export interface IHeroBlockProps {
-	_key: string;
-	_type: "hero";
-	title?: string;
-	image?: string;
-}
-
-export const heroBlock_config = defineType({
+export const heroBlockConfig = defineType({
 	name: "hero",
 	title: "Hero",
 	type: "object",
@@ -19,7 +13,10 @@ export const heroBlock_config = defineType({
 		defineField({
 			name: "image",
 			type: "image",
+			options: { hotspot: true },
+			fields: [defineField({ name: "alt", type: "string" })],
 		}),
+		...baseBlock,
 	],
 	preview: {
 		select: { title: "title", media: "image" },

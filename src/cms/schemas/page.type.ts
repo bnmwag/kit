@@ -10,17 +10,17 @@ export const pageType = defineType({
 		defineField({
 			name: "title",
 			type: "string",
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "slug",
 			type: "slug",
-			options: {
-				source: "title",
-			},
+			options: { source: "title" },
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "content",
-			type: "page_builder",
+			type: "sections",
 		}),
 	],
 	preview: {
