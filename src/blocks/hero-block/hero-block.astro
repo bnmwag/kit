@@ -1,0 +1,107 @@
+---
+import type { Hero } from "@/cms/sanity.types";
+import { Container, Grid, Section } from "@/components/core";
+
+interface Props {
+    data: Hero;
+}
+
+const { data } = Astro.props;
+const { _type, theme, title } = data;
+---
+
+<Section class='h-svh py-grid-margin! overflow-clip' {_type} {theme}>
+    <Container class='h-full'>
+        <Grid class='h-full'>
+            <h1
+                class='hero-headline self-end col-span-full font-thin tracking-tighter leading-[0.95]'
+                style='font-size: clamp(2.5rem, 5.67vw, 8rem)'
+                aria-label={title}
+                data-hero-headline
+            >
+                {title}
+            </h1>
+        </Grid>
+    </Container>
+</Section>
+
+<style is:global>
+    .hero-headline {
+        visibility: hidden;
+    }
+    .hero-headline.is-ready {
+        visibility: visible;
+    }
+    .hero-line {
+        display: block;
+        clip-path: inset(-0.15em 0);
+        line-height: inherit;
+    }
+    .hero-line-inner {
+        display: block;
+        transform: translateY(-150%);
+        will-change: transform;
+    }
+    .hero-line.is-revealing .hero-line-inner {
+        animation: hero-line-fall 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: calc(var(--i, 0) * 90ms + 150ms);
+    }
+    @keyframes hero-line-fall {
+        to {
+            transform: translateY(0);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .hero-line-inner {
+            transform: translateY(0);
+            animation: none;
+        }
+    }
+</style>
+
+<script>
+    const splitIntoLines = (el: HTMLElement, text: string): string[] => {
+        el.innerHTML = text
+            .split(/\s+/)
+            .map((w) => `<span class="hero-measure" style="display:inline-block">${w}</span>`)
+            .join(" ");
+        const spans = Array.from(el.querySelectorAll<HTMLSpanElement>(".hero-measure"));
+        const lines: string[][] = [];
+        let currentTop: number | null = null;
+        for (const span of spans) {
+            const top = span.offsetTop;
+            const word = span.textContent ?? "";
+            if (currentTop === null || top !== currentTop) {
+                lines.push([word]);
+                currentTop = top;
+            } else {
+                lines[lines.length - 1].push(word);
+            }
+        }
+        return lines.map((words) => words.join(" "));
+    };
+
+    const renderLines = (el: HTMLElement, lines: string[], animate: boolean) => {
+        el.innerHTML = lines.map((line, i) => `<div class="hero-line${animate ? " is-revealing" : ""}" style="--i:${i}"><div class="hero-line-inner">${line}</div></div>`).join("");
+    };
+
+    const init = (el: HTMLElement) => {
+        const original = el.dataset.text ?? el.textContent?.trim() ?? "";
+        el.dataset.text = original;
+        let firstRun = true;
+        let resizeTimer: number;
+        const apply = () => {
+            const lines = splitIntoLines(el, original);
+            renderLines(el, lines, firstRun);
+            el.classList.add("is-ready");
+            firstRun = false;
+        };
+        apply();
+        window.addEventListener("resize", () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(apply, 150);
+        });
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-hero-headline]").forEach(init);
+</script>
