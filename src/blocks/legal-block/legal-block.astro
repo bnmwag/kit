@@ -3,6 +3,7 @@ import { toHTML } from "@portabletext/to-html";
 import type { PortableTextBlock } from "@portabletext/types";
 
 import { Container, Grid, Section } from "@/components/core";
+import GridLines from "@/components/misc/grid-lines.astro";
 
 interface LegalLinkValue {
     href?: string;
@@ -34,9 +35,7 @@ const html = body
                       const link = value as LegalLinkValue | undefined;
                       const href = link?.href ?? "#";
                       const isExternal = /^https?:\/\//.test(href);
-                      const attrs = isExternal
-                          ? ' target="_blank" rel="noopener"'
-                          : "";
+                      const attrs = isExternal ? ' target="_blank" rel="noopener"' : "";
                       return `<a href="${href}"${attrs}>${children}</a>`;
                   },
               },
@@ -53,16 +52,15 @@ const formattedDate = lastUpdated
     : null;
 ---
 
-<Section class='py-grid-margin' {_type} {theme}>
+<Section class='pt-grid-margin!' {_type} {theme}>
+    <GridLines />
     <Container>
         <Grid>
-            <article class='legal-prose col-span-full md:col-span-8 md:col-start-3'>
-                {title && <h1 class='text-4xl md:text-5xl mb-grid-margin'>{title}</h1>}
-                {formattedDate && (
-                    <p class='text-sm font-mono opacity-60 mb-grid-margin'>
-                        Last updated: {formattedDate}
-                    </p>
-                )}
+            <h1 class='hero-headline col-span-full self-start text-h1' style='font-size: clamp(2.5rem, 13vw, 20rem)' aria-label={title} data-text-reveal='lines' data-from='top'>
+                {title}
+            </h1>
+            <article class='legal-prose col-span-full md:col-span-5 md:col-start-7 mt-[25vh]'>
+                {formattedDate && <p class='text-sm font-mono opacity-60 mb-grid-margin'>Last updated: {formattedDate}</p>}
                 <Fragment set:html={html} />
             </article>
         </Grid>
@@ -87,15 +85,20 @@ const formattedDate = lastUpdated
         font-weight: 500;
     }
     .legal-prose p {
-        margin-bottom: 1rem;
+        margin-bottom: 0.5rem;
+        line-height: 1.2;
     }
     .legal-prose ul,
     .legal-prose ol {
         margin-bottom: 1rem;
         padding-left: 1.25rem;
     }
-    .legal-prose ul { list-style: disc; }
-    .legal-prose ol { list-style: decimal; }
+    .legal-prose ul {
+        list-style: disc;
+    }
+    .legal-prose ol {
+        list-style: decimal;
+    }
     .legal-prose li {
         margin-bottom: 0.25rem;
     }
@@ -113,6 +116,10 @@ const formattedDate = lastUpdated
         background: color-mix(in oklab, var(--foreground) 8%, transparent);
         border-radius: 0.2em;
     }
-    .legal-prose strong { font-weight: 600; }
-    .legal-prose em { font-style: italic; }
+    .legal-prose strong {
+        font-weight: 600;
+    }
+    .legal-prose em {
+        font-style: italic;
+    }
 </style>

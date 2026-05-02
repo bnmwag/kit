@@ -2,7 +2,7 @@
 import "@/styles/main.css";
 
 import { Font } from "astro:assets";
-import { Navigation } from "@/components/layout";
+import { Footer, Navigation } from "@/components/layout";
 
 interface Props {
   title?: string;
@@ -30,6 +30,7 @@ const { scrollOrientation = "vertical", title = "Kit", description } = Astro.pro
     <main id='swup' data-swup-transition>
       <slot />
     </main>
+    <Footer />
 
     <script>
       import "@/scripts/app";

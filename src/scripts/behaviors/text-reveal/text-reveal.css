@@ -2,8 +2,11 @@
     visibility: hidden;
 }
 
-[data-text-reveal] > * {
-    margin-bottom: -0.1em;
+[data-text-reveal] .line-mask,
+[data-text-reveal] .word-mask,
+[data-text-reveal] .char-mask {
+    overflow: visible !important;
+    clip-path: var(--text-reveal-clip, inset(-0.1em 0 -0.35em 0));
 }
 
 [data-text-reveal] .word-mask,
@@ -14,6 +17,5 @@
 [data-text-reveal] .line-mask > *,
 [data-text-reveal] .word-mask > *,
 [data-text-reveal] .char-mask > * {
-    padding-bottom: 0.1em;
     will-change: transform;
 }

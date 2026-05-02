@@ -15,6 +15,31 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type Legal = {
+  _type: "legal";
+  title?: string;
+  lastUpdated?: string;
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h2" | "h3";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  theme?: "light" | "dark" | "accent";
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
@@ -37,9 +62,12 @@ export type Hero = {
 };
 
 export type Sections = Array<
-  {
-    _key: string;
-  } & Hero
+  | ({
+      _key: string;
+    } & Hero)
+  | ({
+      _key: string;
+    } & Legal)
 >;
 
 export type Page = {
@@ -173,6 +201,7 @@ export type Geopoint = {
 };
 
 export type AllSanitySchemaTypes =
+  | Legal
   | SanityImageAssetReference
   | Hero
   | Sections
