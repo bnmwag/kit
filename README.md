@@ -4,29 +4,27 @@ Astro + Sanity starter. Locomotive Scroll, GSAP, Tailwind v4, Swup transitions. 
 
 ## Setup
 
+See [docs/setup.md](docs/setup.md) for the full walkthrough. Short version:
+
 ```sh
-# 1. clone
 bunx degit bnmwag/kit my-app
 cd my-app
-
-# 2. configure
-cp .env.example .env
-# fill in SANITY_PROJECT_ID (find it at https://sanity.io/manage)
-
-# 3. install + run
 bun install
+cp .env.example .env
+# fill PUBLIC_SANITY_PROJECT_ID from https://sanity.io/manage
+bun run typegen
 bun run dev
 ```
 
 ## Scripts
 
-| Command         | What it does                              |
-| :-------------- | :---------------------------------------- |
-| `dev`           | Start dev server at `localhost:4321`      |
-| `build`         | Build to `./dist/`                        |
-| `preview`       | Preview the production build locally      |
-| `check`         | Run `astro check` (type + content checks) |
-| `typegen`       | Extract Sanity schema and regenerate types |
+| Command   | What it does                              |
+| :-------- | :---------------------------------------- |
+| `dev`     | Start dev server at `localhost:4321`      |
+| `build`   | Build to `./dist/`                        |
+| `preview` | Preview the production build locally      |
+| `check`   | Run `astro check` (type + content checks) |
+| `typegen` | Extract Sanity schema and regenerate types |
 
 The Sanity studio is mounted at `/admin`.
 
