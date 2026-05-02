@@ -24,8 +24,15 @@ export const mount = (el: HTMLElement) => {
 
 	measure();
 
+	let initialized = false;
 	const unsubscribe = $mouse.subscribe((value) => {
-		xTo(value.normalizedX * maxTravel);
+		const x = value.normalizedX * maxTravel;
+		if (!initialized) {
+			gsap.set(image, { x });
+			initialized = true;
+			return;
+		}
+		xTo(x);
 	});
 
 	window.addEventListener("resize", measure);
