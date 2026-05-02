@@ -11,116 +11,26 @@ const { data } = Astro.props;
 const { _type, theme, title } = data;
 ---
 
-<Section class='h-svh py-grid-margin! overflow-clip' {_type} {theme}>
+<Section class='h-svh py-grid-margin! overflow-clip' {_type} {theme} data-hero-block>
     <GridLines />
     <Container class='h-full'>
-        <Grid class='h-full grid-rows-[auto_1fr_auto]'>
-            <h1 class='hero-headline col-span-full row-start-2 self-start text-h1' style='font-size: clamp(2.5rem, 13vw, 20rem)' aria-label={title} data-hero-headline>
+        <Grid class='h-full grid-rows-[1fr_auto]'>
+            <h1 class='hero-headline col-span-full self-start text-h1' style='font-size: clamp(2.5rem, 13vw, 20rem)' aria-label={title} data-text-reveal='lines' data-from='top'>
                 {title}
             </h1>
-            <h2 class='hero-headline col-span-full row-start-2 self-end text-h2 text-foreground/35' aria-label={"run `bun run setup`"} data-hero-headline>$ bun run setup</h2>
+            <div class='relative self-end col-span-full'>
+                <div class='bg-accent aspect-video h-[35vh]' data-hero-block-image></div>
+            </div>
         </Grid>
     </Container>
 </Section>
 
-<style is:global>
-    .hero-headline {
-        visibility: hidden;
-    }
-    .hero-headline.is-ready {
-        visibility: visible;
-    }
-    .hero-line {
-        display: block;
-        clip-path: inset(-0.15em 0);
-        line-height: inherit;
-    }
-    .hero-line-inner {
-        display: block;
-        transform: translateY(-150%);
-        will-change: transform;
-    }
-    .hero-line.is-revealing .hero-line-inner {
-        animation: hero-line-fall 1.1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        animation-delay: calc(var(--i, 0) * 90ms + 150ms);
-    }
-    @keyframes hero-line-fall {
-        to {
-            transform: translateY(0);
-        }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        .hero-line-inner {
-            transform: translateY(0);
-            animation: none;
-        }
-    }
-</style>
-
 <script>
-    const splitIntoLines = (el: HTMLElement, text: string): string[] => {
-        el.innerHTML = text
-            .split(/\s+/)
-            .map((w) => `<span class="hero-measure" style="display:inline-block">${w}</span>`)
-            .join(" ");
-        const spans = Array.from(el.querySelectorAll<HTMLSpanElement>(".hero-measure"));
-        const lines: string[][] = [];
-        let currentTop: number | null = null;
-        for (const span of spans) {
-            const top = span.offsetTop;
-            const word = span.textContent ?? "";
-            if (currentTop === null || top !== currentTop) {
-                lines.push([word]);
-                currentTop = top;
-            } else {
-                lines[lines.length - 1].push(word);
-            }
-        }
-        return lines.map((words) => words.join(" "));
-    };
+    import { defineBehavior } from "@/scripts/core";
 
-    const renderLines = (el: HTMLElement, lines: string[], animate: boolean) => {
-        el.innerHTML = lines.map((line, i) => `<div class="hero-line${animate ? " is-revealing" : ""}" style="--i:${i}"><div class="hero-line-inner">${line}</div></div>`).join("");
-    };
-
-    const init = (el: HTMLElement) => {
-        const original = el.dataset.text ?? el.textContent?.trim() ?? "";
-        el.dataset.text = original;
-        let firstRun = true;
-        let resizeTimer: number;
-        const apply = () => {
-            const lines = splitIntoLines(el, original);
-            renderLines(el, lines, firstRun);
-            el.classList.add("is-ready");
-            firstRun = false;
-        };
-        apply();
-        window.addEventListener("resize", () => {
-            window.clearTimeout(resizeTimer);
-            resizeTimer = window.setTimeout(apply, 150);
-        });
-    };
-
-    document.querySelectorAll<HTMLElement>("[data-hero-headline]").forEach(init);
-
-    document.querySelectorAll<HTMLButtonElement>("[data-copy]").forEach((btn) => {
-        const label = btn.querySelector<HTMLElement>("[data-copy-label]");
-        const original = label?.textContent ?? "Copy";
-        let timer: number | undefined;
-        btn.addEventListener("click", async () => {
-            const text = btn.dataset.copy;
-            if (!text) return;
-            try {
-                await navigator.clipboard.writeText(text);
-                if (!label) return;
-                label.textContent = "Copied";
-                window.clearTimeout(timer);
-                timer = window.setTimeout(() => {
-                    label.textContent = original;
-                }, 1500);
-            } catch (error) {
-                console.error("Clipboard write failed:", error);
-            }
-        });
+    defineBehavior({
+        name: "hero-block",
+        selector: "[data-hero-block]",
+        lazy: () => import("./hero-block.impl"),
     });
 </script>

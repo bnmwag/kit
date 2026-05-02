@@ -1,9 +1,8 @@
-/* Define a transition duration during page visits */
-html.is-changing .transition-fade {
-    transition: opacity 0.25s;
+[data-swup-transition] {
     opacity: 1;
+    transition: opacity 0.3s ease-in-out;
 }
-/* Define the styles for the unloaded pages */
-html.is-animating .transition-fade {
+
+html.is-animating [data-swup-transition] {
     opacity: 0;
 }
