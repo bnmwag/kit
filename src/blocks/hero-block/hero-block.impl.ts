@@ -1,5 +1,7 @@
 import gsap from "gsap";
 
+import { $mouse } from "@/stores/mouse";
+
 export const mount = (el: HTMLElement) => {
 	const image = el.querySelector<HTMLElement>("[data-hero-block-image]");
 	if (!image) return;
@@ -20,18 +22,17 @@ export const mount = (el: HTMLElement) => {
 		ease: "power4.out",
 	});
 
-	const onMouseMove = (event: MouseEvent) => {
-		const ratio = Math.min(1, Math.max(0, event.clientX / window.innerWidth));
-		xTo(ratio * maxTravel);
-	};
-
 	measure();
+
+	const unsubscribe = $mouse.subscribe((value) => {
+		xTo(value.normalizedX * maxTravel);
+	});
+
 	window.addEventListener("resize", measure);
-	window.addEventListener("mousemove", onMouseMove);
 
 	return () => {
 		window.removeEventListener("resize", measure);
-		window.removeEventListener("mousemove", onMouseMove);
+		unsubscribe();
 		gsap.killTweensOf(image);
 		gsap.set(image, { clearProps: "transform" });
 	};

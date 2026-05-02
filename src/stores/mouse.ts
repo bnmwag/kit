@@ -1,4 +1,6 @@
 import { map } from 'nanostores';
+import { debounce } from 'ts-debounce';
+
 import { $screen } from '@/stores/screen';
 import { normalize, roundToDecimals } from '@/scripts/utils/maths';
 
@@ -17,23 +19,67 @@ export type SmoothMouseState = {
     lerp: number;
 };
 
-const HALF_SCREEN_WIDTH = $screen.value!.width * 0.5;
-const HALF_SCREEN_HEIGHT = $screen.value!.height * 0.5;
+const STORAGE_KEY = 'kit:mouse';
+
+type PersistedMouse = {
+    normalizedX: number;
+    normalizedY: number;
+};
+
+const readPersisted = (): PersistedMouse | null => {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (
+            typeof parsed?.normalizedX === 'number' &&
+            typeof parsed?.normalizedY === 'number'
+        ) {
+            return {
+                normalizedX: parsed.normalizedX,
+                normalizedY: parsed.normalizedY,
+            };
+        }
+        return null;
+    } catch {
+        return null;
+    }
+};
+
+const persisted = readPersisted();
+const initialNormalizedX = persisted?.normalizedX ?? 0.5;
+const initialNormalizedY = persisted?.normalizedY ?? 0.5;
+const initialX = initialNormalizedX * $screen.value!.width;
+const initialY = initialNormalizedY * $screen.value!.height;
 
 export const $mouse = map<MouseState>({
-    x: HALF_SCREEN_WIDTH,
-    y: HALF_SCREEN_HEIGHT,
-    normalizedX: 0,
-    normalizedY: 0
+    x: initialX,
+    y: initialY,
+    normalizedX: initialNormalizedX,
+    normalizedY: initialNormalizedY,
 });
 
 export const $smoothMouse = map<SmoothMouseState>({
-    smoothX: HALF_SCREEN_WIDTH,
-    smoothY: HALF_SCREEN_HEIGHT,
-    smoothNormalizedX: 0,
-    smoothNormalizedY: 0,
-    lerp: 0.08
+    smoothX: initialX,
+    smoothY: initialY,
+    smoothNormalizedX: initialNormalizedX,
+    smoothNormalizedY: initialNormalizedY,
+    lerp: 0.08,
 });
+
+const persist = debounce(() => {
+    try {
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify({
+                normalizedX: $mouse.value!.normalizedX,
+                normalizedY: $mouse.value!.normalizedY,
+            }),
+        );
+    } catch {
+        // storage may be disabled or full; ignore
+    }
+}, 250);
 
 let isPlaying = false;
 let RAF: null | any = null;
@@ -46,6 +92,7 @@ const onMouseMove = (event: MouseEvent): void => {
     $mouse.setKey('normalizedX', normalize(0, $screen.value!.width, clientX));
     $mouse.setKey('normalizedY', normalize(0, $screen.value!.height, clientY));
 
+    persist();
     play();
 };
 
@@ -75,16 +122,12 @@ const onUpdate = (): void => {
 
 const play = (): void => {
     if (isPlaying || RAF) return;
-    // Use GSAP ticker instead of RAF
-    // gsap.ticker.add(onUpdate);
     onUpdate();
     isPlaying = true;
 };
 
 const pause = (): void => {
     if (!isPlaying || !RAF) return;
-    // Use GSAP ticker instead of RAF
-    // gsap.ticker.remove(onUpdate);
     cancelAnimationFrame(RAF);
     RAF = null;
     isPlaying = false;
@@ -94,5 +137,4 @@ const hasMouseStopped = (smoothX: number, smoothY: number): boolean => {
     return smoothX + smoothY === $smoothMouse.value!.smoothX + $smoothMouse.value!.smoothY;
 };
 
-/* Events */
 window.addEventListener('mousemove', onMouseMove);
