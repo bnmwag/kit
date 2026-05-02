@@ -1,0 +1,118 @@
+---
+import { toHTML } from "@portabletext/to-html";
+import type { PortableTextBlock } from "@portabletext/types";
+
+import { Container, Grid, Section } from "@/components/core";
+
+interface LegalLinkValue {
+    href?: string;
+}
+
+type Theme = "light" | "dark" | "accent";
+
+interface LegalBlockData {
+    _type: string;
+    title?: string | null;
+    lastUpdated?: string | null;
+    body?: PortableTextBlock[] | null;
+    theme?: Theme | string | null;
+}
+
+interface Props {
+    data: LegalBlockData;
+}
+
+const { data } = Astro.props;
+const { _type, title, lastUpdated, body } = data;
+const theme = (data.theme ?? undefined) as Theme | undefined;
+
+const html = body
+    ? toHTML(body, {
+          components: {
+              marks: {
+                  link: ({ children, value }) => {
+                      const link = value as LegalLinkValue | undefined;
+                      const href = link?.href ?? "#";
+                      const isExternal = /^https?:\/\//.test(href);
+                      const attrs = isExternal
+                          ? ' target="_blank" rel="noopener"'
+                          : "";
+                      return `<a href="${href}"${attrs}>${children}</a>`;
+                  },
+              },
+          },
+      })
+    : "";
+
+const formattedDate = lastUpdated
+    ? new Intl.DateTimeFormat("en", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+      }).format(new Date(lastUpdated))
+    : null;
+---
+
+<Section class='py-grid-margin' {_type} {theme}>
+    <Container>
+        <Grid>
+            <article class='legal-prose col-span-full md:col-span-8 md:col-start-3'>
+                {title && <h1 class='text-4xl md:text-5xl mb-grid-margin'>{title}</h1>}
+                {formattedDate && (
+                    <p class='text-sm font-mono opacity-60 mb-grid-margin'>
+                        Last updated: {formattedDate}
+                    </p>
+                )}
+                <Fragment set:html={html} />
+            </article>
+        </Grid>
+    </Container>
+</Section>
+
+<style is:global>
+    .legal-prose {
+        line-height: 1.6;
+    }
+    .legal-prose h2 {
+        margin-top: 2.5rem;
+        margin-bottom: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 500;
+        letter-spacing: -0.01em;
+    }
+    .legal-prose h3 {
+        margin-top: 1.75rem;
+        margin-bottom: 0.5rem;
+        font-size: 1.125rem;
+        font-weight: 500;
+    }
+    .legal-prose p {
+        margin-bottom: 1rem;
+    }
+    .legal-prose ul,
+    .legal-prose ol {
+        margin-bottom: 1rem;
+        padding-left: 1.25rem;
+    }
+    .legal-prose ul { list-style: disc; }
+    .legal-prose ol { list-style: decimal; }
+    .legal-prose li {
+        margin-bottom: 0.25rem;
+    }
+    .legal-prose a {
+        text-decoration: underline;
+        text-underline-offset: 0.2em;
+    }
+    .legal-prose a:hover {
+        color: var(--accent);
+    }
+    .legal-prose code {
+        font-family: var(--font-mono);
+        font-size: 0.9em;
+        padding: 0.05em 0.3em;
+        background: color-mix(in oklab, var(--foreground) 8%, transparent);
+        border-radius: 0.2em;
+    }
+    .legal-prose strong { font-weight: 600; }
+    .legal-prose em { font-style: italic; }
+</style>

@@ -6,6 +6,8 @@
       "name": "vault",
       "dependencies": {
         "@astrojs/react": "^5.0.4",
+        "@portabletext/to-html": "^5.0.2",
+        "@portabletext/types": "^4.0.2",
         "@sanity/astro": "^3.3.1",
         "@sanity/client": "^7.22.0",
         "@swup/head-plugin": "^2.3.1",
