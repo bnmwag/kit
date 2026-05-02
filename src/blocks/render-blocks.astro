@@ -13,7 +13,7 @@ const { sections } = Astro.props;
     sections?.map((block) => {
         const entry = registry.find((b) => b.name === block._type);
         if (!entry) return null;
-        const Markup = entry.markup;
+        const Markup = entry.markup as (props: { data: typeof block }) => unknown;
         return <Markup data={block} />;
     })
 }
