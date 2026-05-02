@@ -2,6 +2,13 @@
 
 Astro + Sanity starter. Locomotive Scroll, GSAP, Tailwind v4, Swup transitions. Built by creatives, for creatives — less yak-shaving, more actual work.
 
+## Docs
+
+- [docs/setup.md](docs/setup.md) — clone to running dev server
+- [docs/architecture.md](docs/architecture.md) — project layout, principles, how the pieces fit
+- [docs/blocks.md](docs/blocks.md) — add a new page-builder block
+- [docs/scripts.md](docs/scripts.md) — services and behaviors deep dive
+
 ## Setup
 
 See [docs/setup.md](docs/setup.md) for the full walkthrough. Short version:
