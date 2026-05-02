@@ -20,7 +20,9 @@ const STUDIO_URL = `${SITE_URL}/admin`;
 export default defineConfig({
 	output: "server",
 	adapter: vercel(),
-
+	devToolbar: {
+		enabled: false,
+	},
 	fonts: [
 		{
 			provider: fontProviders.fontsource(),
@@ -39,7 +41,6 @@ export default defineConfig({
 			subsets: ["latin"],
 		},
 	],
-
 	vite: {
 		plugins: [tailwindcss()],
 		resolve: {
@@ -56,7 +57,6 @@ export default defineConfig({
 			],
 		},
 	},
-
 	integrations: [
 		sanity({
 			projectId: env.PUBLIC_SANITY_PROJECT_ID,

@@ -47,8 +47,8 @@ export const loadQuery = async <TResult>({
 		{
 			filterResponse: false,
 			perspective,
-			resultSourceMap: draftMode ? "withKeyArraySelector" : false,
-			stega: draftMode,
+			resultSourceMap: false,
+			stega: false,
 			...(draftMode ? { token } : {}),
 		},
 	);

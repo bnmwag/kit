@@ -70,11 +70,13 @@ export const SanityVisualEditing: FC = () => {
 
 		const origPush = window.history.pushState;
 		const origReplace = window.history.replaceState;
-		window.history.pushState = function (...args) {
+		window.history.pushState = (...args: Parameters<typeof origPush>) => {
 			origPush.apply(window.history, args);
 			sync();
 		};
-		window.history.replaceState = function (...args) {
+		window.history.replaceState = (
+			...args: Parameters<typeof origReplace>
+		) => {
 			origReplace.apply(window.history, args);
 			sync();
 		};
