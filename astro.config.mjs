@@ -9,8 +9,8 @@ import sanity from "@sanity/astro";
 
 const env = loadEnv(process.env.NODE_ENV ?? "development", process.cwd(), "");
 
-if (!env.SANITY_PROJECT_ID) {
-	throw new Error("SANITY_PROJECT_ID env var is required");
+if (!env.PUBLIC_SANITY_PROJECT_ID) {
+	throw new Error("PUBLIC_SANITY_PROJECT_ID env var is required");
 }
 
 export default defineConfig({
@@ -42,8 +42,8 @@ export default defineConfig({
 
 	integrations: [
 		sanity({
-			projectId: env.SANITY_PROJECT_ID,
-			dataset: env.SANITY_DATASET ?? "production",
+			projectId: env.PUBLIC_SANITY_PROJECT_ID,
+			dataset: env.PUBLIC_SANITY_DATASET ?? "production",
 			useCdn: false,
 			studioBasePath: "/admin",
 		}),
