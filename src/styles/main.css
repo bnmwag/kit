@@ -8,6 +8,7 @@
 @import "./theme.css";
 @import "./utilities.css";
 @import "./page-transition.css";
+@import "./cookie-consent.css";
 
 html {
     font-family: var(--font-sans);

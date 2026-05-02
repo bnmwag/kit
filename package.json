@@ -23,6 +23,7 @@
     "@swup/preload-plugin": "^3.2.11",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@vercel/analytics": "^2.0.1",
     "astro": "^6.1.10",
     "gsap": "^3.15.0",
     "locomotive-scroll": "^5.0.1",
@@ -33,7 +34,8 @@
     "sanity": "^5.23.0",
     "styled-components": "^6.4.1",
     "swup": "^4.8.3",
-    "ts-debounce": "^5.0.1"
+    "ts-debounce": "^5.0.1",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
