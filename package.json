@@ -13,8 +13,7 @@
     "check": "astro check",
     "typegen:extract": "sanity schema extract --enforce-required-fields",
     "typegen:generate": "sanity typegen generate",
-    "typegen": "bun run typegen:extract && bun run typegen:generate",
-    "seed:privacy": "bun run scripts/seed-privacy-policy.ts"
+    "typegen": "bun run typegen:extract && bun run typegen:generate"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.4",
