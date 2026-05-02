@@ -30,3 +30,45 @@ main > section {
     color: var(--background);
     text-shadow: none;
 }
+
+.app {
+  background-color: #090d14;
+  display: grid;
+  grid-template-areas:
+    "header"
+    "main";
+  height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.app > main {
+  grid-area: main;
+  overflow-y: auto;
+}
+
+main {
+  z-index: 3;
+  clip-path: inset(0% 0% 0% 0%);
+  background-color: hsl(0, 0%, 100%);
+}
+
+main.is-previous-container {
+  pointer-events: none;
+  z-index: 1;
+}
+
+header {
+  z-index: 4;
+}
+
+header.is-previous-container {
+  pointer-events: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #13141e;
+  z-index: 2;
+}
