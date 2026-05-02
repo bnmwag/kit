@@ -12,19 +12,22 @@ export const mount = (el: HTMLElement) => {
 	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
 	let maxTravel = 0;
-
-	const measure = () => {
-		maxTravel = Math.max(0, wrapper.clientWidth - image.offsetWidth);
-	};
+	let initialized = false;
 
 	const xTo = gsap.quickTo(image, "x", {
 		duration: 0.6,
 		ease: "power4.out",
 	});
 
+	const measure = () => {
+		maxTravel = Math.max(0, wrapper.clientWidth - image.offsetWidth);
+		if (initialized) {
+			xTo($mouse.get().normalizedX * maxTravel);
+		}
+	};
+
 	measure();
 
-	let initialized = false;
 	const unsubscribe = $mouse.subscribe((value) => {
 		const x = value.normalizedX * maxTravel;
 		if (!initialized) {
@@ -35,10 +38,12 @@ export const mount = (el: HTMLElement) => {
 		xTo(x);
 	});
 
-	window.addEventListener("resize", measure);
+	const resizeObserver = new ResizeObserver(measure);
+	resizeObserver.observe(image);
+	resizeObserver.observe(wrapper);
 
 	return () => {
-		window.removeEventListener("resize", measure);
+		resizeObserver.disconnect();
 		unsubscribe();
 		gsap.killTweensOf(image);
 		gsap.set(image, { clearProps: "transform" });

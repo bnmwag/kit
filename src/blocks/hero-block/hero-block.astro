@@ -24,7 +24,7 @@ const imageAlt = image?.alt ?? title ?? "";
             </h1>
             <div class='relative self-end col-span-full'>
                 <div class='relative w-fit' data-hero-block-image>
-                    {imageSrc && <img src={imageSrc} alt={imageAlt} loading='lazy' decoding='async' class='max-h-[50vh] h-full w-auto object-cover' />}
+                    {imageSrc && <img src={imageSrc} alt={imageAlt} loading='lazy' decoding='async' data-image-reveal class='max-h-[50vh] h-full w-auto object-cover' />}
                 </div>
             </div>
         </Grid>

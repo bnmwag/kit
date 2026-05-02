@@ -1,7 +1,7 @@
 @utility theme-light {
   --background: #fafafa;
   --foreground: #0b0b0a;
-  --accent: #E3131B;
+  --accent: #BE3D0D;
 
   @apply bg-background text-foreground;
 }
@@ -9,13 +9,13 @@
 @utility theme-dark {
   --background: #0b0b0a;
   --foreground: #fafafa;
-  --accent: #E3131B;
+  --accent: #BE3D0D;
 
   @apply bg-background text-foreground;
 }
 
 @utility theme-accent {
-  --background: #E3131B;
+  --background: #BE3D0D;
   --foreground: #fafafa;
   --accent: #0b0b0a;
 
