@@ -62,7 +62,7 @@ defineService({
                         consentModal: {
                             title: "We use cookies",
                             description:
-                                "Necessary cookies keep this site working. Analytics cookies help us understand how it is used. You can change your choice at any time.",
+                                'We use a strictly necessary cookie to remember your choice. With your consent we also load anonymous analytics. See our <a href="/privacy" target="_blank" rel="noopener">privacy policy</a> and <a href="/cookies" target="_blank" rel="noopener">cookie policy</a>. You can change your choice at any time.',
                             acceptAllBtn: "Accept all",
                             acceptNecessaryBtn: "Reject all",
                             showPreferencesBtn: "Manage preferences",
@@ -77,13 +77,30 @@ defineService({
                                 {
                                     title: "Strictly necessary",
                                     description:
-                                        "These cookies are required for core site functionality and cannot be disabled.",
+                                        "Required for core functionality and to remember your cookie choice. Cannot be disabled.",
                                     linkedCategory: "necessary",
+                                    cookieTable: {
+                                        headers: {
+                                            name: "Name",
+                                            domain: "Domain",
+                                            expiration: "Expiration",
+                                            description: "Description",
+                                        },
+                                        body: [
+                                            {
+                                                name: "cc_cookie",
+                                                domain: "this site",
+                                                expiration: "182 days",
+                                                description:
+                                                    "Stores your cookie consent preferences.",
+                                            },
+                                        ],
+                                    },
                                 },
                                 {
                                     title: "Analytics",
                                     description:
-                                        "Anonymous traffic insights. Used to improve the site. No data is shared until you accept.",
+                                        'Vercel Web Analytics. Cookieless: no identifiers are stored on your device. Each request is anonymized via a daily-rotated hash. Aggregated data is processed by Vercel Inc. (US) — see our <a href="/privacy" target="_blank" rel="noopener">privacy policy</a> for the data transfer basis.',
                                     linkedCategory: "analytics",
                                 },
                             ],
