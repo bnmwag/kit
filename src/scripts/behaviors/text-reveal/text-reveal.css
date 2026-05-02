@@ -1,0 +1,19 @@
+[data-text-reveal] {
+    visibility: hidden;
+}
+
+[data-text-reveal] > * {
+    margin-bottom: -0.1em;
+}
+
+[data-text-reveal] .word-mask,
+[data-text-reveal] .char-mask {
+    vertical-align: top;
+}
+
+[data-text-reveal] .line-mask > *,
+[data-text-reveal] .word-mask > *,
+[data-text-reveal] .char-mask > * {
+    padding-bottom: 0.1em;
+    will-change: transform;
+}
