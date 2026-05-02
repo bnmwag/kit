@@ -20,7 +20,7 @@ interface Props {
 const { slug } = Astro.props;
 
 const page = await sanityClient.fetch(groq.page.bySlug, { slug });
-if (!page) Astro.redirect("/404");
+if (!page) return Astro.redirect("/404");
 ---
 
 <Base title={page.title}>

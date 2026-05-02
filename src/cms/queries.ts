@@ -1,18 +1,22 @@
 import { defineQuery } from "groq";
 
+const pageAllSlugsQuery = defineQuery(
+	`*[_type == "page" && defined(slug.current)]{ "slug": slug.current }`,
+);
+
+const pageBySlugQuery = defineQuery(
+	`*[_type == "page" && slug.current == $slug][0]{
+		_id,
+		_type,
+		title,
+		"slug": slug.current,
+		content
+	}`,
+);
+
 export const groq = {
 	page: {
-		allSlugs: defineQuery(
-			`*[_type == "page" && defined(slug.current)]{ "slug": slug.current }`,
-		),
-		bySlug: defineQuery(
-			`*[_type == "page" && slug.current == $slug][0]{
-				_id,
-				_type,
-				title,
-				"slug": slug.current,
-				content
-			}`,
-		),
+		allSlugs: pageAllSlugsQuery,
+		bySlug: pageBySlugQuery,
 	},
 };

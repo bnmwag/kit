@@ -217,3 +217,30 @@ export type AllSanitySchemaTypes =
   | SanityAssetSourceData
   | SanityImageAsset
   | Geopoint;
+
+// Source: src/cms/queries.ts
+// Variable: pageAllSlugsQuery
+// Query: *[_type == "page" && defined(slug.current)]{ "slug": slug.current }
+export type PageAllSlugsQueryResult = Array<{
+  slug: string;
+}>;
+
+// Source: src/cms/queries.ts
+// Variable: pageBySlugQuery
+// Query: *[_type == "page" && slug.current == $slug][0]{		_id,		_type,		title,		"slug": slug.current,		content	}
+export type PageBySlugQueryResult = {
+  _id: string;
+  _type: "page";
+  title: string;
+  slug: string;
+  content: Sections | null;
+} | null;
+
+// Query TypeMap
+import "@sanity/client";
+declare module "@sanity/client" {
+  interface SanityQueries {
+    '*[_type == "page" && defined(slug.current)]{ "slug": slug.current }': PageAllSlugsQueryResult;
+    '*[_type == "page" && slug.current == $slug][0]{\n\t\t_id,\n\t\t_type,\n\t\ttitle,\n\t\t"slug": slug.current,\n\t\tcontent\n\t}': PageBySlugQueryResult;
+  }
+}
