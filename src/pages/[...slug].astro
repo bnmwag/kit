@@ -1,25 +1,20 @@
 ---
-import { sanityClient } from "sanity:client";
 import { RenderBlocks } from "@/blocks";
 import { groq } from "@/cms/queries";
+import { loadQuery } from "@/cms/load-query";
+import { getDraftModeProps } from "@/cms/draft-mode";
 import { Base } from "@/components/layout";
+import type { PageBySlugQueryResult } from "@/cms/sanity.types";
 
-export const getStaticPaths = async () => {
-    const pages = await sanityClient.fetch(groq.page.allSlugs);
+const slugParam = Astro.params.slug;
+const slug = !slugParam || slugParam === "" ? "home" : slugParam;
 
-    return pages.map(({ slug }) => ({
-        params: { slug: slug === "home" ? "" : slug },
-        props: { slug },
-    }));
-};
+const { data: page } = await loadQuery<PageBySlugQueryResult>({
+    query: groq.page.bySlug,
+    params: { slug },
+    ...getDraftModeProps(Astro.cookies),
+});
 
-interface Props {
-    slug: string;
-}
-
-const { slug } = Astro.props;
-
-const page = await sanityClient.fetch(groq.page.bySlug, { slug });
 if (!page) return Astro.redirect("/404");
 ---
 

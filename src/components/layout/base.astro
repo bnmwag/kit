@@ -3,6 +3,9 @@ import "@/styles/main.css";
 
 import { Font } from "astro:assets";
 import { Footer, Navigation } from "@/components/layout";
+import { isDraftModeActive } from "@/cms/draft-mode";
+import SanityVisualEditing from "@/components/sanity/sanity-visual-editing";
+import DisableDraftMode from "@/components/sanity/disable-draft-mode";
 
 interface Props {
   title?: string;
@@ -11,6 +14,7 @@ interface Props {
 }
 
 const { scrollOrientation = "vertical", title = "Kit", description } = Astro.props;
+const draftMode = isDraftModeActive(Astro.cookies);
 ---
 
 <!doctype html>
@@ -31,6 +35,13 @@ const { scrollOrientation = "vertical", title = "Kit", description } = Astro.pro
       <slot />
     </main>
     <Footer />
+
+    {draftMode && (
+      <>
+        <SanityVisualEditing client:only='react' />
+        <DisableDraftMode client:only='react' />
+      </>
+    )}
 
     <script>
       import "@/scripts/app";

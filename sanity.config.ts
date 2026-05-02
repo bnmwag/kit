@@ -1,6 +1,8 @@
 import { schema } from "@/cms/schemas";
 import { structure } from "@/cms/structure";
+import { resolve } from "@/cms/presentation/resolve";
 import { defineConfig } from "sanity";
+import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 
 const nodeEnv =
@@ -14,6 +16,11 @@ const dataset =
 	nodeEnv?.PUBLIC_SANITY_DATASET ??
 	"production";
 
+const previewOrigin =
+	import.meta.env.PUBLIC_SITE_URL ??
+	nodeEnv?.PUBLIC_SITE_URL ??
+	"http://localhost:4321";
+
 if (!projectId) {
 	throw new Error("PUBLIC_SANITY_PROJECT_ID env var is required");
 }
@@ -23,6 +30,17 @@ export default defineConfig({
 	title: "Kit",
 	projectId,
 	dataset,
-	plugins: [structureTool({ structure })],
+	plugins: [
+		presentationTool({
+			resolve,
+			previewUrl: {
+				initial: previewOrigin,
+				previewMode: {
+					enable: "/api/draft-mode/enable",
+				},
+			},
+		}),
+		structureTool({ structure }),
+	],
 	schema,
 });
