@@ -149,23 +149,21 @@ CSS imports go in the **eager** index file (so styles ship with every page that 
 
 ### Block-scoped behaviors
 
-A behavior that only makes sense for one block lives in the block's folder, registered from the block's astro `<script>` tag:
+A behavior that only makes sense for one block keeps its **impl** colocated with the block, but **registration must happen from `src/scripts/behaviors/`** — the registration stub is loaded once via the eager glob in `app.ts`, which lives outside the swup container.
 
-```astro
-<!-- src/blocks/hero-block/hero-block.astro -->
-<script>
-    import { defineBehavior } from "@/scripts/core";
+```ts
+// src/scripts/behaviors/hero-block.ts          ← registration (eager)
+import { defineBehavior } from "@/scripts/core";
 
-    defineBehavior({
-        name: "hero-block",
-        selector: "[data-hero-block]",
-        lazy: () => import("./hero-block.impl"),
-    });
-</script>
+defineBehavior({
+    name: "hero-block",
+    selector: "[data-hero-block]",
+    lazy: () => import("@/blocks/hero-block/hero-block.impl"),
+});
 ```
 
 ```ts
-// src/blocks/hero-block/hero-block.impl.ts
+// src/blocks/hero-block/hero-block.impl.ts    ← implementation (lazy chunk)
 import gsap from "gsap";
 
 export const mount = (el: HTMLElement) => {
@@ -174,7 +172,9 @@ export const mount = (el: HTMLElement) => {
 };
 ```
 
-Astro hoists each `<script>` as its own Vite module entry — only routes that include the block ship the registration stub, and the impl is a further-split chunk fetched only when the selector matches.
+The block's `.astro` file should NOT contain a `<script>` tag for registration. Astro inlines those inside the swup container; when swup swaps body content via `innerHTML`, browsers do not execute script tags inserted that way, so the behavior never registers on cross-page transitions.
+
+The lazy import still gives you per-route splitting: the impl chunk is only fetched when the kernel sees a matching `[data-hero-block]` element on a `page:enter`.
 
 ### Mount semantics
 

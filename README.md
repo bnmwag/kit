@@ -8,6 +8,10 @@ Astro + Sanity starter. Locomotive Scroll, GSAP, Tailwind v4, Swup transitions. 
 - [docs/architecture.md](docs/architecture.md) — project layout, principles, how the pieces fit
 - [docs/blocks.md](docs/blocks.md) — add a new page-builder block
 - [docs/scripts.md](docs/scripts.md) — services and behaviors deep dive
+- [docs/stores.md](docs/stores.md) — nanostores: state, subscriptions, persistence
+- [docs/consent.md](docs/consent.md) — cookie banner and consent-gated analytics
+
+For LLM agents (Claude Code, Codex, Cursor): see [AGENTS.md](AGENTS.md) at the repo root.
 
 ## Setup
 
