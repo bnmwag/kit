@@ -1,5 +1,6 @@
 import gsap from "gsap";
 
+import { $mediaStatus } from "@/stores/device-status";
 import { $mouse } from "@/stores/mouse";
 
 export const mount = (el: HTMLElement) => {
@@ -9,7 +10,7 @@ export const mount = (el: HTMLElement) => {
 	const wrapper = image.parentElement;
 	if (!wrapper) return;
 
-	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+	if ($mediaStatus.get().isReducedMotion) return;
 
 	let maxTravel = 0;
 	let initialized = false;

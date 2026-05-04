@@ -1,4 +1,5 @@
 import { awaitEntrance } from "@/scripts/core";
+import { $mediaStatus } from "@/stores/device-status";
 
 const STEPS = [4, 8, 16, 32, 64, 128, 256];
 const STEP_MS = 60;
@@ -54,7 +55,7 @@ const drawPixelated = (
 
 export const mount = (el: HTMLElement) => {
 	if (!(el instanceof HTMLImageElement)) return;
-	if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+	if ($mediaStatus.get().isReducedMotion) return;
 
 	const img = el;
 	const parent = img.parentElement;

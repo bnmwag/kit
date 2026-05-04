@@ -1,4 +1,5 @@
 import { defineService, releaseEntrance } from "@/scripts/core";
+import { $mediaStatus } from "@/stores/device-status";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 
@@ -24,7 +25,7 @@ defineService({
 			document.documentElement.classList.add(READY_CLASS);
 		};
 
-		if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+		if ($mediaStatus.get().isReducedMotion) {
 			finish();
 			return;
 		}
