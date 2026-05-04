@@ -12,7 +12,8 @@ Client-side state lives in `src/stores/` as nanostores atoms or maps. Always imp
 | `$screenDebounce` | `map<ScreenValues>` | `stores/screen.ts` | Same, debounced 200ms. |
 | `$scroll` | varies | `stores/scroll.ts` | Locomotive scroll position bridge. |
 | `$breakpoints` | `map<Breakpoints>` | `stores/device-status.ts` | CSS custom-property breakpoints, read once. |
-| `$mediaQueries` | `map<MediaQueries>` | `stores/device-status.ts` | Reduced-motion, touch, touch-or-small. |
+| `$mediaQueries` | `map<MediaQueries>` | `stores/device-status.ts` | Raw query strings (reduced-motion, touch, touch-or-small). Rarely read directly. |
+| `$mediaStatus` | `map<MediaStatus>` | `stores/device-status.ts` | Live booleans: `isReducedMotion`, `isTouchScreen`, `isTouchOrSmall`. Auto-updates on `MediaQueryList` change. |
 | `$consent` | `atom<IConsentState>` | `stores/consent.ts` | `{ ready, analytics }`. Updated by `services/consent.ts`. |
 
 ## Module-load side effects
@@ -82,9 +83,24 @@ const unsubscribe = $mouse.subscribe((value) => {
 
 If you find yourself passing a value through three layers of components, that's a store.
 
+## Reduced motion (and other media queries)
+
+Read from `$mediaStatus`, not `matchMedia()`:
+
+```ts
+import { $mediaStatus } from "@/stores/device-status";
+
+if ($mediaStatus.get().isReducedMotion) return;
+```
+
+`device-status.ts` already listens for `change` events on the underlying `MediaQueryList`, so the boolean stays accurate if the OS preference flips mid-session. Calling `matchMedia(...)` ad-hoc creates a parallel source of truth that won't update — and if you do it three times in three files, you're back to scattered duplication.
+
+The same applies to `isTouchScreen` and `isTouchOrSmall`. If you need reactivity, `$mediaStatus.subscribe(...)` works like any other nanostore.
+
 ## Don't
 
 - Don't mutate store values directly — `setKey` / `set` only.
 - Don't subscribe outside `mount()` / `setup()`. You'll leak listeners across page transitions.
 - Don't persist absolute pixel positions. Future-you will resize the window and stare at a broken cursor.
 - Don't write a custom event-bus. The kernel's `emit` / `on` exists for lifecycle events; user state goes in stores.
+- Don't call `matchMedia(...)` directly. Use `$mediaStatus`.
