@@ -3,16 +3,20 @@ import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"section"> {
     _type: string;
-    theme: "light" | "dark" | "accent" | undefined;
+    theme?: "light" | "dark" | "accent";
 }
 
-const { class: className, _type, theme, ...props } = Astro.props;
+const { class: className, _type, theme = "light", ...props } = Astro.props;
+
+const classes = [
+    "relative bg-background text-foreground py-16 lg:py-[17vh]",
+    `theme-${theme}`,
+    className,
+]
+    .filter(Boolean)
+    .join(" ");
 ---
 
-<section
-    data-block={_type}
-    class={`relative bg-background text-foreground py-16 lg:py-[17vh] ${className ?? ""} theme-${theme}`}
-    {...props}
->
+<section data-block={_type} class={classes} {...props}>
     <slot />
 </section>

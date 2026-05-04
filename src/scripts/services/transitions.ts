@@ -8,48 +8,12 @@ import { toDash } from "@/scripts/utils/string";
 const READY_CLASS = "is-ready";
 const TRANSITIONING_CLASS = "is-transitioning";
 
-const parseMs = (value: string) => {
-    const first = value.split(",")[0]?.trim() ?? "0";
-    if (first.endsWith("ms")) return Number.parseFloat(first);
-    if (first.endsWith("s")) return Number.parseFloat(first) * 1000;
-    return Number.parseFloat(first);
-};
-
-const awaitTransition = async () => {
-    const el = document.querySelector<HTMLElement>("[data-swup-transition]");
-    if (!el) return;
-
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-
-    const styles = getComputedStyle(el);
-    const total =
-        parseMs(styles.transitionDuration) + parseMs(styles.transitionDelay);
-    if (total <= 0) return;
-
-    await new Promise<void>((resolve) => {
-        let resolved = false;
-        const finish = () => {
-            if (resolved) return;
-            resolved = true;
-            el.removeEventListener("transitionend", onEnd);
-            resolve();
-        };
-        const onEnd = (event: TransitionEvent) => {
-            if (event.target === el && event.propertyName === "opacity") {
-                finish();
-            }
-        };
-        el.addEventListener("transitionend", onEnd);
-        window.setTimeout(finish, total + 50);
-    });
-};
-
-interface IVisit {
+type Visit = {
     fragmentVisit?: unknown;
     to: { html?: string };
-}
+};
 
-const updateDocumentAttributes = (visit: IVisit) => {
+const updateDocumentAttributes = (visit: Visit) => {
     if (visit.fragmentVisit || !visit.to.html) return;
     const parser = new DOMParser();
     const nextDOM = parser.parseFromString(visit.to.html, "text/html");
@@ -65,7 +29,7 @@ defineService({
     setup() {
         const swup = new Swup({
             animateHistoryBrowsing: true,
-            animationSelector: false,
+            animationSelector: "[data-swup-transition]",
             plugins: [
                 new SwupHeadPlugin({
                     persistAssets: true,
@@ -83,14 +47,12 @@ defineService({
             document.documentElement.classList.remove(READY_CLASS);
         });
 
-        swup.hooks.replace("animation:out:start", async () => {
+        swup.hooks.on("animation:out:start", () => {
             document.documentElement.classList.add("is-animating");
-            await awaitTransition();
         });
 
-        swup.hooks.replace("animation:in:start", async () => {
+        swup.hooks.on("animation:in:start", () => {
             document.documentElement.classList.remove("is-animating");
-            await awaitTransition();
         });
 
         swup.hooks.before("content:replace", async () => {
@@ -114,5 +76,7 @@ defineService({
         swup.hooks.on("fetch:timeout", (event) => {
             console.error("[transitions] fetch:timeout", event);
         });
+
+        return () => swup.destroy();
     },
 });

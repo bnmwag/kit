@@ -7,6 +7,6 @@ export { defineService } from "./services";
 export { awaitEntrance, releaseEntrance } from "./entrance";
 export type {
     IBehaviorConfig,
-    ILifecycleEvent,
     IServiceConfig,
+    LifecycleEvent,
 } from "./types";

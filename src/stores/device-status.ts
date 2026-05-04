@@ -1,63 +1,60 @@
 import { map } from "nanostores";
 
 export type Breakpoints = {
-	sm: string;
+    sm: string;
 };
 
-const root = document.documentElement;
-const breakpointSm = getComputedStyle(root)
-	.getPropertyValue("--breakpoint-sm")
-	.trim();
+const isBrowser = typeof window !== "undefined";
+
+const readBreakpoint = (name: string): string => {
+    if (!isBrowser) return "";
+    return getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim();
+};
 
 export const $breakpoints = map<Breakpoints>({
-	sm: breakpointSm,
+    sm: readBreakpoint("--breakpoint-sm"),
 });
 
 export type MediaQueries = {
-	reducedMotion: string;
-	touchScreen: string;
-	touchOrSmall: string;
+    reducedMotion: string;
+    touchScreen: string;
+    touchOrSmall: string;
 };
 
 export const $mediaQueries = map<MediaQueries>({
-	reducedMotion: "(prefers-reduced-motion: reduce)",
-	touchScreen: "(hover: none)",
-	touchOrSmall: `(max-width: ${$breakpoints.value?.sm}), (hover: none)`,
+    reducedMotion: "(prefers-reduced-motion: reduce)",
+    touchScreen: "(hover: none)",
+    touchOrSmall: `(max-width: ${$breakpoints.get().sm}), (hover: none)`,
 });
-
-type MediaStatusQueries = {
-	reducedMotion: MediaQueryList;
-	touchScreen: MediaQueryList;
-	touchOrSmall: MediaQueryList;
-};
-
-const mediaStatusQueries = {
-	reducedMotion: matchMedia($mediaQueries.value?.reducedMotion || ""),
-	touchScreen: matchMedia($mediaQueries.value?.touchScreen || ""),
-	touchOrSmall: matchMedia($mediaQueries.value?.touchOrSmall || ""),
-};
 
 export type MediaStatus = {
-	isReducedMotion: boolean;
-	isTouchScreen: boolean;
-	isTouchOrSmall: boolean;
+    isReducedMotion: boolean;
+    isTouchScreen: boolean;
+    isTouchOrSmall: boolean;
 };
 
+const toStatusKey = (key: keyof MediaQueries): keyof MediaStatus =>
+    `is${key[0].toUpperCase()}${key.slice(1)}` as keyof MediaStatus;
+
 export const $mediaStatus = map<MediaStatus>({
-	isReducedMotion: mediaStatusQueries.reducedMotion.matches,
-	isTouchScreen: mediaStatusQueries.touchScreen.matches,
-	isTouchOrSmall: mediaStatusQueries.touchOrSmall.matches,
+    isReducedMotion: false,
+    isTouchScreen: false,
+    isTouchOrSmall: false,
 });
 
-for (const mediaQuery in mediaStatusQueries) {
-	mediaStatusQueries[mediaQuery as keyof MediaStatusQueries].addEventListener(
-		"change",
-		() => {
-			const property = `is${mediaQuery.charAt(0).toUpperCase() + mediaQuery.slice(1)}`;
-			$mediaStatus.setKey(
-				property as keyof MediaStatus,
-				mediaStatusQueries[mediaQuery as keyof MediaStatusQueries].matches,
-			);
-		},
-	);
+if (isBrowser) {
+    const entries = Object.entries($mediaQueries.get()) as Array<
+        [keyof MediaQueries, string]
+    >;
+
+    for (const [key, query] of entries) {
+        const list = window.matchMedia(query);
+        const statusKey = toStatusKey(key);
+        $mediaStatus.setKey(statusKey, list.matches);
+        list.addEventListener("change", () => {
+            $mediaStatus.setKey(statusKey, list.matches);
+        });
+    }
 }

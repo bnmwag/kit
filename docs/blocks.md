@@ -32,6 +32,7 @@ src/blocks/hero-block/
   hero-block.astro          ← the markup. receives `data` prop typed against the schema.
   hero-block.config.ts      ← Sanity object type (defineType). owns fields and preview.
   hero-block.css            ← (optional) block-scoped styles. imported by impl or astro.
+  hero-block.behavior.ts    ← (optional) eager registration via defineBehavior. picked up by the kernel glob.
   hero-block.impl.ts        ← (optional) lazy behavior implementation. exports `mount(el)`.
   index.ts                  ← barrel: re-exports the astro default + the config.
 ```
@@ -150,7 +151,10 @@ This extracts the schema and writes `src/cms/sanity.types.ts`. Now `import type 
 
 ## Adding a behavior to a block
 
-Block-scoped runtime logic (animations, interactivity) lives in a `<script>` tag inside the block's astro file, registering a `defineBehavior` whose impl is lazy-imported. That keeps the heavy code in a separate Vite chunk that only loads on routes that actually use the block.
+Block-scoped runtime logic (animations, interactivity) lives in two files inside the block folder:
+
+- `<block>.behavior.ts` — eager registration via `defineBehavior`. Auto-discovered by the kernel.
+- `<block>.impl.ts` — the lazy `mount(el)` implementation. Loaded as a separate Vite chunk on first match.
 
 See [scripts.md](scripts.md#block-scoped-behaviors) for the full recipe and an example with GSAP.
 

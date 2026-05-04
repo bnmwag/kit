@@ -1,8 +1,8 @@
-import type { ILifecycleEvent, ILifecycleHandler } from "./types";
+import type { LifecycleEvent, LifecycleHandler } from "./types";
 
-const handlers = new Map<ILifecycleEvent, Set<ILifecycleHandler>>();
+const handlers = new Map<LifecycleEvent, Set<LifecycleHandler>>();
 
-export const on = (event: ILifecycleEvent, handler: ILifecycleHandler) => {
+export const on = (event: LifecycleEvent, handler: LifecycleHandler) => {
     if (!handlers.has(event)) handlers.set(event, new Set());
     handlers.get(event)!.add(handler);
     return () => {
@@ -10,7 +10,7 @@ export const on = (event: ILifecycleEvent, handler: ILifecycleHandler) => {
     };
 };
 
-export const emit = async (event: ILifecycleEvent) => {
+export const emit = async (event: LifecycleEvent) => {
     const set = handlers.get(event);
     if (!set) return;
     for (const handler of set) {

@@ -149,21 +149,21 @@ CSS imports go in the **eager** index file (so styles ship with every page that 
 
 ### Block-scoped behaviors
 
-A behavior that only makes sense for one block keeps its **impl** colocated with the block, but **registration must happen from `src/scripts/behaviors/`** — the registration stub is loaded once via the eager glob in `app.ts`, which lives outside the swup container.
+A behavior that only makes sense for one block colocates with that block. Drop a `<block>.behavior.ts` file in the block folder — the kernel globs `src/blocks/**/*.behavior.ts` from `app.ts`, so registration happens automatically.
 
 ```ts
-// src/scripts/behaviors/hero-block.ts          ← registration (eager)
+// src/blocks/hero-block/hero-block.behavior.ts    ← registration (eager)
 import { defineBehavior } from "@/scripts/core";
 
 defineBehavior({
     name: "hero-block",
     selector: "[data-hero-block]",
-    lazy: () => import("@/blocks/hero-block/hero-block.impl"),
+    lazy: () => import("./hero-block.impl"),
 });
 ```
 
 ```ts
-// src/blocks/hero-block/hero-block.impl.ts    ← implementation (lazy chunk)
+// src/blocks/hero-block/hero-block.impl.ts        ← implementation (lazy chunk)
 import gsap from "gsap";
 
 export const mount = (el: HTMLElement) => {
@@ -172,9 +172,9 @@ export const mount = (el: HTMLElement) => {
 };
 ```
 
-The block's `.astro` file should NOT contain a `<script>` tag for registration. Astro inlines those inside the swup container; when swup swaps body content via `innerHTML`, browsers do not execute script tags inserted that way, so the behavior never registers on cross-page transitions.
+The block's `.astro` file should NOT contain a `<script>` tag for registration. Astro inlines those inside the swup container; when swup swaps body content via `innerHTML`, browsers do not execute script tags inserted that way, so the behavior never registers on cross-page transitions. The `.behavior.ts` glob is the equivalent — registered once at the app shell level, mounted automatically on each `page:enter`.
 
-The lazy import still gives you per-route splitting: the impl chunk is only fetched when the kernel sees a matching `[data-hero-block]` element on a `page:enter`.
+The impl chunk is only fetched when the kernel sees a matching `[data-hero-block]` element, so per-route bundle splitting is preserved.
 
 ### Mount semantics
 

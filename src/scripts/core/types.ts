@@ -1,8 +1,8 @@
 export type Cleanup = () => void;
 
-export type ILifecycleEvent = "app:ready" | "page:enter" | "page:leave";
+export type LifecycleEvent = "app:ready" | "page:enter" | "page:leave";
 
-export type ILifecycleHandler = () => void | Promise<void>;
+export type LifecycleHandler = () => void | Promise<void>;
 
 export interface IServiceConfig {
     name: string;
