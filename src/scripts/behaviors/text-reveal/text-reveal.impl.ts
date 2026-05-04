@@ -2,6 +2,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 
+import { awaitEntrance } from "@/scripts/core";
+
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
 type SplitMode = "lines" | "words" | "chars";
@@ -77,62 +79,77 @@ export const mount = (el: HTMLElement) => {
         };
     }
 
-    el.style.visibility = "visible";
-
     const scrollMode = el.getAttribute("data-scroll");
     const useScroll = el.hasAttribute("data-scroll");
     const useScrub = scrollMode === "scrub";
     const once = el.hasAttribute("data-once")
         ? el.getAttribute("data-once") !== "false"
         : CONFIG.once;
+    const entranceDelay = readNumber(el.dataset.entranceDelay, 0);
 
-    const split = SplitText.create(el, {
-        ...options,
-        autoSplit: true,
-        onSplit(instance) {
-            const duration = readNumber(el.dataset.duration, defaults.duration);
-            const stagger = readNumber(el.dataset.stagger, defaults.stagger);
-            const delay = readNumber(el.dataset.delay, 0);
-            const ease = el.dataset.ease || defaults.ease;
+    let cancelled = false;
+    let split: SplitText | null = null;
 
-            const targets = instance[mode];
-            const yPercent = el.dataset.from === "top" ? -110 : 110;
+    void awaitEntrance(entranceDelay).then(() => {
+        if (cancelled) return;
 
-            const vars: gsap.TweenVars = {
-                yPercent,
-                duration,
-                stagger,
-                delay,
-                immediateRender: true,
-                ease,
-            };
+        el.style.visibility = "visible";
 
-            if (useScrub) {
-                vars.scrollTrigger = {
-                    trigger: el,
-                    start: CONFIG.scrubStart,
-                    end: CONFIG.scrubEnd,
-                    scrub: true,
-                    ...(once && {
-                        onLeave: (self: ScrollTrigger) => self.kill(false),
-                    }),
+        split = SplitText.create(el, {
+            ...options,
+            autoSplit: true,
+            onSplit(instance) {
+                const duration = readNumber(
+                    el.dataset.duration,
+                    defaults.duration,
+                );
+                const stagger = readNumber(
+                    el.dataset.stagger,
+                    defaults.stagger,
+                );
+                const delay = readNumber(el.dataset.delay, 0);
+                const ease = el.dataset.ease || defaults.ease;
+
+                const targets = instance[mode];
+                const yPercent = el.dataset.from === "top" ? -110 : 110;
+
+                const vars: gsap.TweenVars = {
+                    yPercent,
+                    duration,
+                    stagger,
+                    delay,
+                    immediateRender: true,
+                    ease,
                 };
-            } else if (useScroll) {
-                const start = scrollMode || CONFIG.scrollStart;
-                vars.scrollTrigger = {
-                    trigger: el,
-                    start: `clamp(${start})`,
-                    ...(once
-                        ? { once: true }
-                        : { toggleActions: "play none none reverse" }),
-                };
-            }
 
-            return gsap.from(targets, vars);
-        },
+                if (useScrub) {
+                    vars.scrollTrigger = {
+                        trigger: el,
+                        start: CONFIG.scrubStart,
+                        end: CONFIG.scrubEnd,
+                        scrub: true,
+                        ...(once && {
+                            onLeave: (self: ScrollTrigger) => self.kill(false),
+                        }),
+                    };
+                } else if (useScroll) {
+                    const start = scrollMode || CONFIG.scrollStart;
+                    vars.scrollTrigger = {
+                        trigger: el,
+                        start: `clamp(${start})`,
+                        ...(once
+                            ? { once: true }
+                            : { toggleActions: "play none none reverse" }),
+                    };
+                }
+
+                return gsap.from(targets, vars);
+            },
+        });
     });
 
     return () => {
-        split.revert();
+        cancelled = true;
+        split?.revert();
     };
 };

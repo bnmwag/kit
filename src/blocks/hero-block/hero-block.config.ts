@@ -16,6 +16,10 @@ export const heroBlockConfig = defineType({
 			options: { hotspot: true },
 			fields: [defineField({ name: "alt", type: "string" })],
 		}),
+		defineField({
+			name: "excerpt",
+			type: "string",
+		}),
 		...baseBlock,
 	],
 	preview: {

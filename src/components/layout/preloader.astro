@@ -1,0 +1,41 @@
+---
+interface Props {
+    label?: string;
+}
+
+const { label = "Creative Astro Kit™" } = Astro.props;
+---
+
+<div data-preloader>
+    <span data-preloader-label>
+        <slot>{label}</slot>
+    </span>
+</div>
+
+<style>
+    [data-preloader] {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        background: var(--background);
+        color: var(--foreground);
+        will-change: transform;
+    }
+
+    [data-preloader-label] {
+        font-family: var(--font-sans);
+        font-size: 1.8rem;
+        font-weight: 400;
+        letter-spacing: -0.055rem;
+        line-height: 6.6938rem;
+        opacity: 0;
+        transform: translateY(16px);
+        will-change: transform, opacity;
+    }
+
+    html.is-preloaded [data-preloader] {
+        display: none;
+    }
+</style>

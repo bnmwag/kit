@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { data } = Astro.props;
-const { _type, theme, title, image } = data;
+const { _type, theme, title, image, excerpt } = data;
 
 const imageSrc = image?.asset ? urlFor(image).width(1600).auto("format").url() : null;
 const imageAlt = image?.alt ?? title ?? "";
@@ -19,12 +19,40 @@ const imageAlt = image?.alt ?? title ?? "";
     <GridLines />
     <Container class='h-full'>
         <Grid class='h-full grid-rows-[1fr_auto]'>
-            <h1 class='hero-headline col-span-full self-start text-h1' style='font-size: clamp(2.5rem, 13vw, 20rem)' aria-label={title} data-text-reveal='lines' data-from='top'>
+            <h1
+                class='hero-headline col-span-full self-start text-h1'
+                style='font-size: clamp(2.5rem, 13vw, 20rem)'
+                aria-label={title}
+                data-text-reveal='lines'
+                data-from='top'
+                data-entrance-delay='0.5'
+            >
                 {title}
             </h1>
             <div class='relative self-end col-span-full'>
+                <p
+                    class='absolute left-0 bottom-0 w-full max-w-md text-xs uppercase text-balance'
+                    data-text-reveal='lines'
+                    data-from='top'
+                    data-delay='0.5'
+                    data-entrance-delay='0.5'
+                >
+                    {excerpt}
+                </p>
                 <div class='relative w-fit' data-hero-block-image>
-                    {imageSrc && <img src={imageSrc} alt={imageAlt} loading='lazy' decoding='async' data-image-reveal class='max-h-[50vh] h-full w-auto object-cover' />}
+                    {
+                        imageSrc && (
+                            <img
+                                src={imageSrc}
+                                alt={imageAlt}
+                                loading='lazy'
+                                decoding='async'
+                                data-image-reveal
+                                class='max-h-[50vh] h-full w-auto object-cover'
+                                data-entrance-delay='0.5'
+                            />
+                        )
+                    }
                 </div>
             </div>
         </Grid>

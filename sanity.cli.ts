@@ -30,7 +30,7 @@ export default defineCliConfig({
 	},
 	autoUpdates: true,
 	typegen: {
-		path: "./src/**/*.{ts,tsx,js,jsx,astro}",
+		path: "./src/**/*.{ts,tsx,js,jsx}",
 		schema: "./schema.json",
 		generates: "./src/cms/sanity.types.ts",
 	},

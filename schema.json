@@ -313,6 +313,13 @@
           },
           "optional": true
         },
+        "excerpt": {
+          "type": "objectAttribute",
+          "value": {
+            "type": "string"
+          },
+          "optional": true
+        },
         "theme": {
           "type": "objectAttribute",
           "value": {

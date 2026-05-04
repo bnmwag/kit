@@ -58,6 +58,7 @@ export type Hero = {
     alt?: string;
     _type: "image";
   };
+  excerpt?: string;
   theme?: "light" | "dark" | "accent";
 };
 

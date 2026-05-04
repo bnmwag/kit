@@ -2,7 +2,7 @@
 import "@/styles/main.css";
 
 import { Font } from "astro:assets";
-import { Footer, Navigation } from "@/components/layout";
+import { Footer, Navigation, Preloader } from "@/components/layout";
 import { isDraftModeActive } from "@/cms/draft-mode";
 import SanityVisualEditing from "@/components/sanity/sanity-visual-editing";
 import DisableDraftMode from "@/components/sanity/disable-draft-mode";
@@ -30,6 +30,7 @@ const draftMode = isDraftModeActive(Astro.cookies);
     {description && <meta name='description' content={description} />}
   </head>
   <body class='font-sans antialiased'>
+    <Preloader />
     <Navigation />
     <main id='swup' data-swup-transition>
       <slot />

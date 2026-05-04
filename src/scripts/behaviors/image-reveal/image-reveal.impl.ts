@@ -1,5 +1,13 @@
+import { awaitEntrance } from "@/scripts/core";
+
 const STEPS = [4, 8, 16, 32, 64, 128, 256];
 const STEP_MS = 60;
+
+const readNumber = (value: string | undefined, fallback: number) => {
+	if (value === undefined) return fallback;
+	const parsed = Number.parseFloat(value);
+	return Number.isNaN(parsed) ? fallback : parsed;
+};
 
 const wait = (ms: number) =>
 	new Promise<void>((resolve) => setTimeout(resolve, ms));
@@ -151,6 +159,10 @@ export const mount = (el: HTMLElement) => {
 				});
 				if (cancelled) return;
 			}
+
+			const entranceDelay = readNumber(el.dataset.entranceDelay, 0);
+			await awaitEntrance(entranceDelay);
+			if (cancelled) return;
 
 			for (let i = 1; i < STEPS.length; i++) {
 				await wait(STEP_MS);
